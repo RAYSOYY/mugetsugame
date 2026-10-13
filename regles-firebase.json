@@ -1,0 +1,36 @@
+{
+  "rules": {
+    "rooms": {
+      ".read": "auth != null",
+      ".indexOn": ["created"],
+      "$code": {
+        ".write": "auth != null && !newData.exists() && (data.child('host').val() === auth.uid || data.child('created').val() < now - 86400000)",
+        "host": {
+          ".write": "auth != null && !data.exists() && newData.val() === auth.uid"
+        },
+        "created": {
+          ".write": "auth != null && root.child('rooms').child($code).child('host').val() === auth.uid"
+        },
+        "state": {
+          ".write": "auth != null && root.child('rooms').child($code).child('host').val() === auth.uid",
+          ".validate": "newData.isString() && newData.val().length < 60000"
+        },
+        "hostOn": {
+          ".write": "auth != null && root.child('rooms').child($code).child('host').val() === auth.uid"
+        },
+        "players": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid",
+            ".validate": "newData.hasChildren(['n']) && newData.child('n').isString() && newData.child('n').val().length <= 14"
+          }
+        },
+        "acts": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid",
+            ".validate": "newData.isString() && newData.val().length < 4000"
+          }
+        }
+      }
+    }
+  }
+}

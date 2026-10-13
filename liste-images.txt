@@ -1,0 +1,163 @@
+LISTE DES IMAGES – MugetsuGame
+
+Mets chaque image dans le dossier « images », avec EXACTEMENT ce nom.
+Formats acceptés : .webp, .jpg ou .png (ex. goku-ssj-blue.webp ou goku-ssj-blue.jpg).
+Taille conseillée : environ 300 px de large, format portrait.
+S'il manque une image, la carte avec les initiales s'affiche à la place.
+
+goku   ←  Goku
+goku-ssj   ←  Goku (SSJ)
+goku-ssj2   ←  Goku (SSJ2)
+goku-ssj3   ←  Goku (SSJ3)
+goku-ssj4   ←  Goku (SSJ4)
+goku-ssj-god   ←  Goku (SSJ God)
+goku-ssj-blue   ←  Goku (SSJ Blue)
+goku-kaioken   ←  Goku (Kaioken)
+goku-ultra-instinct-signe   ←  Goku (Ultra Instinct Signe)
+goku-ultra-instinct   ←  Goku (Ultra Instinct)
+vegeta   ←  Vegeta
+vegeta-ssj   ←  Vegeta (SSJ)
+vegeta-ssj2   ←  Vegeta (SSJ2)
+vegeta-ssj3   ←  Vegeta (SSJ3)
+vegeta-ssj4   ←  Vegeta (SSJ4)
+vegeta-ssj-god   ←  Vegeta (SSJ God)
+vegeta-ssj-blue   ←  Vegeta (SSJ Blue)
+vegeta-ssj-blue-evolue   ←  Vegeta (SSJ Blue Évolué)
+vegeta-ultra-ego   ←  Vegeta (Ultra Ego)
+baby-vegeta   ←  Baby Vegeta
+super-baby-vegeta   ←  Super Baby Vegeta
+gohan   ←  Gohan
+gohan-ssj   ←  Gohan (SSJ)
+gohan-ssj2   ←  Gohan (SSJ2)
+gohan-ultime   ←  Gohan (Ultime)
+gohan-beast   ←  Gohan (Beast)
+goten   ←  Goten
+goten-ssj   ←  Goten (SSJ)
+trunks-enfant   ←  Trunks enfant
+trunks-enfant-ssj   ←  Trunks enfant (SSJ)
+trunks-du-futur   ←  Trunks du futur
+trunks-du-futur-ssj   ←  Trunks du futur (SSJ)
+trunks-du-futur-ssj-rage   ←  Trunks du futur (SSJ Rage)
+gotenks   ←  Gotenks
+gotenks-ssj   ←  Gotenks (SSJ)
+gotenks-ssj3   ←  Gotenks (SSJ3)
+gogeta   ←  Gogeta
+gogeta-ssj   ←  Gogeta (SSJ)
+gogeta-ssj4   ←  Gogeta (SSJ4)
+gogeta-ssj-blue   ←  Gogeta (SSJ Blue)
+vegetto   ←  Vegetto
+vegetto-ssj   ←  Vegetto (SSJ)
+vegetto-ssj-blue   ←  Vegetto (SSJ Blue)
+kefla   ←  Kefla
+kefla-ssj2   ←  Kefla (SSJ2)
+gattai-zamasu   ←  Gattai Zamasu
+bardock   ←  Bardock
+bardock-ssj   ←  Bardock (SSJ)
+raditz   ←  Raditz
+nappa   ←  Nappa
+roi-vegeta   ←  Roi Vegeta
+broly-dbz   ←  Broly DBZ
+broly-dbz-ssj   ←  Broly DBZ (SSJ)
+broly-dbz-ssj-legendaire   ←  Broly DBZ (SSJ Légendaire)
+broly-dbs   ←  Broly DBS
+broly-dbs-ikari   ←  Broly DBS (Ikari)
+broly-dbs-ssj   ←  Broly DBS (SSJ)
+broly-dbs-ssj-legendaire   ←  Broly DBS (SSJ Légendaire)
+kale   ←  Kale
+kale-ssj-legendaire   ←  Kale (SSJ Légendaire)
+caulifla   ←  Caulifla
+caulifla-ssj   ←  Caulifla (SSJ)
+caulifla-ssj2   ←  Caulifla (SSJ2)
+cabba   ←  Cabba
+cabba-ssj   ←  Cabba (SSJ)
+freezer-1re-forme   ←  Freezer (1re forme)
+freezer-2e-forme   ←  Freezer (2e forme)
+freezer-3e-forme   ←  Freezer (3e forme)
+freezer-forme-finale   ←  Freezer (forme finale)
+freezer-100   ←  Freezer (100 %)
+mecha-freezer   ←  Mecha Freezer
+golden-freezer   ←  Golden Freezer
+black-freezer   ←  Black Freezer
+cooler   ←  Cooler
+cooler-forme-finale   ←  Cooler (forme finale)
+frost   ←  Frost
+frost-forme-finale   ←  Frost (forme finale)
+zarbon   ←  Zarbon
+dodoria   ←  Dodoria
+capitaine-ginyu   ←  Capitaine Ginyu
+recoome   ←  Recoome
+jeece   ←  Jeece
+burter   ←  Burter
+guldo   ←  Guldo
+cell-imparfait   ←  Cell (imparfait)
+cell-semi-parfait   ←  Cell (semi-parfait)
+cell-parfait   ←  Cell (parfait)
+super-perfect-cell   ←  Super Perfect Cell
+cell-max   ←  Cell Max
+dr-gero   ←  Dr Gero
+c-16   ←  C-16
+c-17   ←  C-17
+super-c-17   ←  Super C-17
+c-18   ←  C-18
+c-21   ←  C-21
+gamma-1   ←  Gamma 1
+gamma-2   ←  Gamma 2
+majin-buu   ←  Majin Buu
+super-buu   ←  Super Buu
+super-buu-gohan-absorbe   ←  Super Buu (Gohan absorbé)
+super-buu-gotenks-absorbe   ←  Super Buu (Gotenks absorbé)
+super-buu-piccolo-absorbe   ←  Super Buu (Piccolo absorbé)
+kid-buu   ←  Kid Buu
+babidi   ←  Babidi
+dabra   ←  Dabra
+piccolo   ←  Piccolo
+piccolo-orange   ←  Piccolo (Orange)
+krilin   ←  Krilin
+yamcha   ←  Yamcha
+tenshinhan   ←  Tenshinhan
+chaozu   ←  Chaozu
+yajirobe   ←  Yajirobe
+tortue-geniale   ←  Tortue Géniale
+mr-satan   ←  Mr. Satan
+uub   ←  Uub
+dende   ←  Dende
+nail   ←  Nail
+bulma   ←  Bulma
+chichi   ←  Chichi
+videl   ←  Videl
+pan   ←  Pan
+bra   ←  Bra
+marron   ←  Marron
+lunch   ←  Lunch
+oolong   ←  Oolong
+plume   ←  Plume
+grand-pere-gohan   ←  Grand-père Gohan
+sangoku-jr   ←  Sangoku jr
+sangoku-jr-ssj   ←  Sangoku jr (SSJ)
+vegeta-jr   ←  Vegeta jr
+vegeta-jr-ssj   ←  Vegeta jr (SSJ)
+kaio-shin   ←  Kaio Shin
+kaio-du-nord   ←  Kaio du Nord
+beerus   ←  Beerus
+whis   ←  Whis
+champa   ←  Champa
+vados   ←  Vados
+zeno   ←  Zeno
+hit   ←  Hit
+jiren   ←  Jiren
+jiren-full-power   ←  Jiren (Full Power)
+toppo   ←  Toppo
+toppo-dieu-de-la-destruction   ←  Toppo (Dieu de la Destruction)
+goku-black   ←  Goku Black
+goku-black-ssj-rose   ←  Goku Black (SSJ Rosé)
+zamasu   ←  Zamasu
+moro   ←  Moro
+granolah   ←  Granolah
+gas   ←  Gas
+janemba   ←  Janemba
+super-janemba   ←  Super Janemba
+tapion   ←  Tapion
+baby   ←  Baby
+omega-shenron   ←  Omega Shenron
+tao-pai-pai   ←  Tao Pai Pai
+shenron   ←  Shenron
