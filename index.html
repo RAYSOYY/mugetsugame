@@ -160,7 +160,10 @@ const UNI = {
 };
 const UNI_SOON = ["One Piece","Naruto","Jujutsu Kaisen","Demon Slayer"];
 const MODES = {
-  enchere:{nom:"Enchère",pl:"2 joueurs",min:2,max:99,
+  enchereC:{nom:"Enchère classique",pl:"2 joueurs",min:2,max:99,
+    desc:"500 M chacun. Le perso tiré est visible par tout le monde. Fais monter les prix, gère ton budget. Premier à 5 persos, débat, puis vote.",
+    rules:["Chaque joueur commence avec 500 millions. Mise minimum : 10 M.","À tour de rôle, un joueur tire un perso, visible par les deux joueurs et les spectateurs, et propose une mise de départ.","L'autre surenchérit (+10 M minimum) ou passe. Le dernier à miser remporte le perso.","Quand un joueur a 5 persos, l'autre continue de tirer un par un et doit prendre chaque perso, gratuitement, jusqu'à avoir 5 persos.","Débat final : 2 minutes pour voter la meilleure équipe. Les spectateurs votent aussi."]},
+  enchere:{nom:"Enchère mystère",pl:"2 joueurs",min:2,max:99,
     desc:"500 M chacun. Tire un perso que toi seul vois, lance la mise et bluffe. Premier à 5 persos, débat, puis vote.",
     rules:["Chaque joueur commence avec 500 millions. Mise minimum : 10 M.","À tour de rôle, un joueur tire un perso que lui seul voit et propose une mise de départ. Il peut bluffer.","L'autre surenchérit (+10 M minimum) ou passe. Le dernier à miser remporte le perso.","Quand un joueur a 5 persos, l'autre continue de tirer un par un et doit prendre chaque perso, gratuitement, jusqu'à avoir 5 persos.","Débat final : 2 minutes pour voter la meilleure équipe. Les spectateurs votent aussi."]},
   undercover:{nom:"Undercover",pl:"3 à 10 joueurs",min:3,max:10,
@@ -371,7 +374,7 @@ function fixCfg(){
 function canStart(s){
   const n=s.pl.length,m=MODES[s.mode];
   if(m.off)return "Ce mode n'est pas encore jouable.";
-  if(s.mode==="enchere"){const[a,b]=s.cfg.e;return a&&b&&a!==b?"":"Il faut 2 joueurs dans le salon."}
+  if(s.mode==="enchere"||s.mode==="enchereC"){const[a,b]=s.cfg.e;return a&&b&&a!==b?"":"Il faut 2 joueurs dans le salon."}
   if(n<m.min)return `Il faut au moins ${m.min} joueurs (vous êtes ${n}).`;
   if(n>m.max)return `Maximum ${m.max} joueurs pour ce mode (vous êtes ${n}).`;
   return "";
@@ -393,9 +396,9 @@ function handle(peer,a){
   if(ch)publish();
 }
 function startGame(){
-  if(H.mode==="enchere"){
+  if(H.mode==="enchere"||H.mode==="enchereC"){
     const a=idxOf(H.cfg.e[0]),b=idxOf(H.cfg.e[1]);
-    H.e={pp:[a,b],bud:[BUDGET,BUDGET],team:[[],[]],free:[[],[]],turn:rnd(2),used:[],cur:null,last:null,votes:{}};
+    H.e={vis:H.mode==="enchereC",pp:[a,b],bud:[BUDGET,BUDGET],team:[[],[]],free:[[],[]],turn:rnd(2),used:[],cur:null,last:null,votes:{}};
     H.ph="e_draw";
   }else if(H.mode==="undercover"){
     const order=shuffle(H.pl.map((_,k)=>k));
@@ -593,7 +596,7 @@ function viewLobby(){
   const modes=`<div class="modes">${Object.entries(MODES).map(([k,m])=>`<button class="mode ${s.mode===k?"on":""}" ${isHost&&!m.off?`data-a="mode" data-m="${k}"`:"disabled"} ${m.off?'style="opacity:.5"':""}><span class="mn">${esc(m.nom)}${m.off?' <span class="tag">Bientôt</span>':""}</span><span class="mp">${esc(m.pl)}</span><p>${esc(m.desc)}</p></button>`).join("")}</div>`;
   const opts=sel=>s.pl.map(p=>`<option value="${esc(p.p)}" ${p.p===sel?"selected":""}>${esc(p.n)}</option>`).join("");
   let extra="";
-  if(s.mode==="enchere"){
+  if(s.mode==="enchere"||s.mode==="enchereC"){
     extra=isHost?`<div class="row"><span class="lab">Joueurs</span><select id="ea" data-a="cfgE" data-k="0">${opts(s.cfg.e[0])}</select><span class="muted">contre</span><select id="eb" data-a="cfgE" data-k="1">${opts(s.cfg.e[1])}</select></div><p class="muted" style="margin:0">Les autres regardent et votent à la fin.</p>`
       :`<p class="muted" style="margin:0">Duel : <b>${esc(nm(s.pl.findIndex(p=>p.p===s.cfg.e[0])))}</b> contre <b>${esc(nm(s.pl.findIndex(p=>p.p===s.cfg.e[1])))}</b></p>`;
   }else if(s.mode==="devine"){
@@ -624,7 +627,7 @@ function viewE(){
   if(ph==="e_draw"){
     const last=e.last?`<p class="muted" style="margin:0"><b>${esc(nm(e.pp[e.last.w]))}</b> a remporté <b>${esc(charName(e.last.c))}</b> pour ${fmtM(e.last.p)}.</p>`:"";
     center=`<div class="stage">${e.last?card(e.last.c,"","Dernier achat"):cardBack("En attente")}<div class="col">${last}
-      ${side===e.turn?`<h2>À toi de tirer</h2><p class="muted" style="margin:0">Tu seras le seul à voir le perso.</p><div><button class="btn main" data-a="eDraw">Tirer un perso</button></div>`
+      ${side===e.turn?`<h2>À toi de tirer</h2><p class="muted" style="margin:0">${e.vis?"Le perso sera visible par tout le monde.":"Tu seras le seul à voir le perso."}</p><div><button class="btn main" data-a="eDraw">Tirer un perso</button></div>`
       :`<h2 class="pulse">${esc(nm(drawer))} va tirer un perso</h2>`}</div></div>`;
   }else if(ph==="e_fdraw"||ph==="e_ftake"){
     const left=TEAM-e.team[e.turn].length,mine=side===e.turn;
@@ -637,13 +640,13 @@ function viewE(){
     }
   }else if(ph==="e_open"){
     const mx=e.bud[e.turn],mn=Math.min(MINBID,mx);
-    center=side===e.turn?`<div class="stage">${card(e.cur.c,"big","Toi seul le vois")}<div class="col"><h2>Lance l'enchère</h2>
-      <p class="muted" style="margin:0">Mise de départ entre ${fmtM(mn)} et ${fmtM(mx)}. Tu peux bluffer.</p>
+    center=side===e.turn?`<div class="stage">${card(e.cur.c,"big",e.vis?"Visible par tous":"Toi seul le vois")}<div class="col"><h2>Lance l'enchère</h2>
+      <p class="muted" style="margin:0">Mise de départ entre ${fmtM(mn)} et ${fmtM(mx)}.${e.vis?"":" Tu peux bluffer."}</p>
       <div class="row"><input type="number" id="eopen" min="${mn}" max="${mx}" step="10" value="${mn}"><button class="btn main" data-a="eOpen">Miser</button></div></div></div>`
-      :`<div class="stage">${cardBack("Perso secret","big")}<div class="col"><h2 class="pulse">${esc(nm(drawer))} regarde son perso…</h2><p class="muted" style="margin:0">Prépare-toi à surenchérir ou à passer.</p></div></div>`;
+      :`<div class="stage">${e.vis?card(e.cur.c,"big","Tiré par "+nm(drawer)):cardBack("Perso secret","big")}<div class="col"><h2 class="pulse">${esc(nm(drawer))} ${e.vis?"choisit sa mise de départ…":"regarde son perso…"}</h2><p class="muted" style="margin:0">Prépare-toi à surenchérir ou à passer.</p></div></div>`;
   }else if(ph==="e_bid"){
     const to=e.cur.to,need=e.cur.bid+MINBID,can=e.bud[to]>=need;
-    const cardHtml=side===e.turn?card(e.cur.c,"big","Toi seul le vois"):cardBack("Tiré par "+nm(drawer),"big");
+    const cardHtml=e.vis?card(e.cur.c,"big","Tiré par "+nm(drawer)):side===e.turn?card(e.cur.c,"big","Toi seul le vois"):cardBack("Tiré par "+nm(drawer),"big");
     center=`<div class="stage">${cardHtml}<div class="col">
       <span class="lab">Mise actuelle</span><div class="big-num">${fmtM(e.cur.bid)}</div>
       <p class="muted" style="margin:0">Meneur : <b>${esc(nm(e.pp[e.cur.lead]))}</b></p>
@@ -665,9 +668,9 @@ function viewE(){
       center=`<div class="banner"><span class="lab">Résultat du vote</span><h2>${w<0?"Égalité !":esc(nm(e.pp[w]))+" gagne !"}</h2><p style="margin:.3em 0 0">${v[0]} vote(s) contre ${v[1]}</p></div>${teams}`;
     }
   }
-  return `<div class="row" style="justify-content:space-between"><h2>Enchère</h2><span class="lab">${side<0?"Spectateur":"Joueur"}</span></div>
+  return `<div class="row" style="justify-content:space-between"><h2>${e.vis?"Enchère classique":"Enchère mystère"}</h2><span class="lab">${side<0?"Spectateur":"Joueur"}</span></div>
     ${ph==="e_vote"||ph==="e_end"?"":`<div class="duo">${sideBox(0)}${sideBox(1)}</div>`}
-    <div class="panel stack">${center}</div>${rulesBox("enchere")}`;
+    <div class="panel stack">${center}</div>${rulesBox(e.vis?"enchereC":"enchere")}`;
 }
 
 /* ---------- UNDERCOVER ---------- */
