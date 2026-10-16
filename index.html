@@ -178,7 +178,7 @@ const MODES = {
     rules:["Chaque joueur commence avec 500 millions. Mise minimum : 10 M.","À tour de rôle, un joueur tire un perso que lui seul voit et propose une mise de départ. Il peut bluffer.","L'autre surenchérit (+10 M minimum) ou passe. Le dernier à miser remporte le perso.","Quand un joueur a 5 persos, l'autre continue de tirer un par un et doit prendre chaque perso, gratuitement, jusqu'à avoir 5 persos.","Débat final : 2 minutes pour voter la meilleure équipe. Les spectateurs votent aussi."]},
   undercover:{nom:"Undercover",pl:"3 à 10 joueurs",min:3,max:10,
     desc:"Tout le monde a le même mot, sauf l'imposteur. Deux tours d'indices, puis 1 min 30 pour voter. Égalité = nouveau tour.",
-    rules:["Chaque joueur reçoit un mot de l'univers. Un imposteur reçoit un mot proche mais différent, sans savoir qu'il est l'imposteur.","Chacun donne un mot en rapport avec le sien, à tour de rôle. On fait deux tours.","Vote : 1 min 30 pour désigner l'imposteur.","En cas d'égalité (ou si personne n'a voté), un nouveau tour d'indices se lance, puis on revote. Ça continue jusqu'à ce qu'un seul joueur ait le plus de votes.","Si le plus voté est l'imposteur, les civils gagnent. Sinon, l'imposteur gagne."]},
+    rules:["Chaque joueur reçoit un mot de l'univers. Un imposteur reçoit un mot proche mais différent, sans savoir qu'il est l'imposteur.","Chacun donne un mot en rapport avec le sien, à tour de rôle, dans le fil des mots. Seul le joueur dont c'est le tour peut écrire. On fait deux tours.","Vote : 1 min 30 pour désigner l'imposteur.","En cas d'égalité (ou si personne n'a voté), un nouveau tour d'indices se lance, puis on revote. Ça continue jusqu'à ce qu'un seul joueur ait le plus de votes.","Si le plus voté est l'imposteur, les civils gagnent. Sinon, l'imposteur gagne."]},
   devine:{nom:"Devine le perso",pl:"3 à 6 joueurs",min:3,max:6,
     desc:"Un juge voit tout. Les autres reçoivent un perso secret et posent 3 questions pour gagner des points.",
     rules:["Un juge est obligatoire. Il voit le perso de chaque joueur.","Chaque joueur reçoit un perso secret au hasard. Chacun a 3 questions au total, du genre « Mon perso est le plus beau ».","Le juge donne le point à un ou plusieurs joueurs selon son avis.","À la fin, chaque joueur (sauf le juge) peut deviner le perso des autres. Bonne réponse = les points de la cible tombent à 0.","Le plus de points gagne."]}
@@ -463,9 +463,6 @@ function modeAction(i,a){
       (u.cl[i]=u.cl[i]||[]).push(w);u.i++;
       if(u.i>=u.order.length){if(u.r<u.rv){u.r++;u.i=0}else{H.ph="u_vote";H.ends=Date.now()+T_U}}
       return true}
-    if(a.t==="chat"&&u.order.includes(i)){
-      const m=clip(a.m,60);if(!m)return false;
-      u.chat.push({p:i,m});if(u.chat.length>20)u.chat.shift();return true}
     if(H.ph==="u_vote"&&a.t==="vote"&&u.order.includes(i)&&u.order.includes(a.v)&&a.v!==i){
       u.votes[i]=a.v;
       if(u.order.every(k=>u.votes[k]!==undefined))finishU();
@@ -706,10 +703,23 @@ function viewE(){
 }
 
 /* ---------- UNDERCOVER ---------- */
-function chatBox(u,inGame){
-  const msgs=(u.chat||[]).map(c=>`<div class="cmsg"><b style="color:${avColor(nm(c.p))}">${esc(nm(c.p))}</b> ${esc(c.m)}</div>`).join("")||`<p class="muted" style="margin:0;font-size:14px">Personne n'a encore écrit. Discutez des mots ici pendant les tours et le vote.</p>`;
-  return `<div class="panel stack"><span class="lab">Chat</span><div class="chatlog" id="chatlog">${msgs}</div>
-    ${inGame?`<div class="row"><input type="text" id="uchat" maxlength="60" placeholder="Écris un message…"><button class="btn" data-a="uChat">Envoyer</button></div>`:""}</div>`;
+function wordFeed(u,mi,ph){
+  const cur=ph==="u_clue"?u.order[u.i]:-1;
+  let rows="";
+  for(let r=0;r<u.rv;r++){
+    const items=u.order.filter(k=>(u.cl[k]||[])[r]!==undefined);
+    if(!items.length&&!(ph==="u_clue"&&u.r===r+1))continue;
+    rows+=`<div class="lab" style="margin-top:4px">Tour ${r+1}</div>`;
+    rows+=items.map(k=>`<div class="cmsg row" style="gap:8px;flex-wrap:nowrap">${avi(k)}<span style="min-width:0"><b>${esc(nm(k))}</b>${k===mi?" (toi)":""}${ph==="u_end"&&k===u.imp?` <span class="tag acc">Imposteur</span>`:""} : ${esc(u.cl[k][r])}</span></div>`).join("");
+  }
+  if(!rows)rows=`<p class="muted" style="margin:0;font-size:14px">Les mots de chaque joueur apparaîtront ici.</p>`;
+  let foot="";
+  if(ph==="u_clue"){
+    foot=cur===mi
+      ?`<div class="stack" style="gap:8px"><b>À toi ! Donne un mot en rapport avec le tien.</b><div class="row"><input type="text" id="uclue" maxlength="20" placeholder="Ton mot…"><button class="btn main" data-a="uClue">Envoyer</button></div></div>`
+      :`<p class="pulse" style="margin:0"><b>${esc(nm(cur))}</b> réfléchit à son mot…</p>`;
+  }
+  return `<div class="panel stack"><span class="lab">Fil des mots</span><div class="chatlog" id="chatlog">${rows}</div>${foot}</div>`;
 }
 function viewU(){
   const u=st.u,mi=myIdx(),ph=st.ph,pair=u.w||["?","?"];
@@ -723,8 +733,8 @@ function viewU(){
   if(ph==="u_clue"){
     const cur=u.order[u.i];
     const tie=u.tie&&u.r>2?`<div class="banner"><span class="lab">Égalité au vote</span><h2>Nouveau tour d'indices</h2><p style="margin:.3em 0 0">${u.tie.length?"Égalité entre "+u.tie.map(k=>`<b>${esc(nm(k))}</b>`).join(", ")+".":"Personne n'a voté."} Chacun redonne un mot, puis on revote.</p></div>`:"";
-    center=tie+cur===mi?`<h3>Tour ${u.r} : à toi de donner un mot</h3><div class="row"><input type="text" id="uclue" maxlength="20" placeholder="Un mot en rapport avec le tien"><button class="btn main" data-a="uClue">Envoyer</button></div>`
-      :`<p class="pulse" style="margin:0">Tour ${u.r} : <b>${esc(nm(cur))}</b> réfléchit à son mot…</p>`;
+    center=tie+(cur===mi?`<h3>Tour ${u.r} : c'est à toi !</h3><p class="muted" style="margin:0">Écris ton mot dans le fil des mots, juste en dessous.</p>`
+      :`<h3>Tour ${u.r}</h3><p class="pulse" style="margin:0">C'est au tour de <b>${esc(nm(cur))}</b>.</p>`);
   }else if(ph==="u_vote"){
     const my=u.votes[mi],nv=Object.keys(u.votes).length;
     center=`<div class="row" style="justify-content:space-between"><h3>Qui est l'imposteur ?</h3>${timer()}</div>
@@ -738,7 +748,7 @@ function viewU(){
       <div class="score">${u.order.map(k=>`<div class="s"><span>${esc(nm(k))}</span><b>${r.t[k]||0}</b></div>`).join("")}</div>`;
   }
   return `<div class="row" style="justify-content:space-between"><h2>Undercover</h2><span class="lab">${esc(uniLabel(st.uni))}</span></div>
-    ${ph==="u_end"?"":myWord}<div class="panel stack">${center}</div>${chatBox(u,inGame)}<div class="panel">${table}</div>${rulesBox("undercover")}`;
+    ${ph==="u_end"?"":myWord}<div class="panel stack">${center}</div>${wordFeed(u,mi,ph)}${rulesBox("undercover")}`;
 }
 
 /* ---------- DEVINE LE PERSO ---------- */
@@ -814,7 +824,6 @@ document.addEventListener("click",e=>{
     case "eVote": act("vote",{w:+b.dataset.w});break;
     case "uClue": {const el=$("#uclue");const w=clip(el?.value,20);if(!w)return;el.value="";act("clue",{w});break}
     case "uVote": act("vote",{v:+b.dataset.v});break;
-    case "uChat": {const el=$("#uchat");const m=clip(el?.value,60);if(!m)return;el.value="";act("chat",{m});break}
     case "dAsk": {const el=$("#dask");const q=clip(el?.value,80);if(el)el.value="";act("ask",{q});break}
     case "dAskSkip": act("askSkip");break;
     case "dJudgeSkip": act("judge",{w:[]});break;
@@ -833,7 +842,7 @@ document.addEventListener("change",e=>{
 document.addEventListener("keydown",e=>{
   if(e.key!=="Enter")return;
   const id=e.target.id;
-  const map={myname:"create",joincode:"join",uclue:"uClue",uchat:"uChat",dask:"dAsk",eopen:"eOpen",eraise:"eRaise"};
+  const map={myname:"create",joincode:"join",uclue:"uClue",dask:"dAsk",eopen:"eOpen",eraise:"eRaise"};
   if(id==="myname"&&G)return;
   if(map[id]){e.preventDefault();document.querySelector(`[data-a="${map[id]}"]`)?.click()}
 });
