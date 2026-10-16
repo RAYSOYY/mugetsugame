@@ -166,6 +166,8 @@ const UNI = {
     pairs: [["Goku", "Vegeta"], ["Kamehameha", "Final Flash"], ["Namek", "Terre"], ["Shenron", "Porunga"], ["Cell", "Freezer"], ["Gohan", "Trunks"], ["Kaioken", "Super Saiyan"], ["Bulma", "Chichi"], ["Capsule Corp", "Kame House"], ["Beerus", "Whis"], ["Majin Buu", "Cell"], ["Fusion", "Potara"], ["Krilin", "Yamcha"], ["Kaio du Nord", "Kaio Shin"], ["Salle du Temps", "Planète du Kaio"], ["Radar", "Scouter"], ["C-17", "C-18"], ["Tournoi des Arts Martiaux", "Tournoi du Pouvoir"], ["Broly", "Jiren"], ["Queue de singe", "Lune"], ["Piccolo", "Nail"], ["Nuage magique", "Bâton magique"], ["Boules de cristal", "Super Boules de cristal"], ["Genkidama", "Death Ball"], ["Makankosappo", "Masenko"], ["Tortue Géniale", "Maître Karin"], ["Goku", "Goku Black"], ["Super Saiyan", "Super Saiyan 3"], ["SSJ Blue", "SSJ God"], ["Saiyan", "Demi-Saiyan"], ["SSJ Blue", "SSJ Rosé"], ["Ultra Instinct", "Ultra Ego"], ["Super Saiyan 4", "Oozaru"], ["Gohan Ultime", "Gohan Beast"], ["Golden Freezer", "Black Freezer"], ["Freezer", "Cooler"], ["Raditz", "Nappa"], ["Bardock", "Roi Vegeta"], ["Goten", "Trunks enfant"], ["Gogeta", "Vegetto"], ["Goku Black", "Zamasu"], ["Beerus", "Champa"], ["Whis", "Vados"], ["Jiren", "Toppo"], ["Broly", "Kale"], ["Caulifla", "Cabba"], ["Galick Gun", "Big Bang Attack"], ["Kikoho", "Dodonpa"], ["Taiyoken", "Zanzoken"], ["Kami Sama", "Dende"], ["Palais de Kami Sama", "Tour de Karin"], ["Planète Vegeta", "Planète Sadala"], ["Dr Gero", "Dr Myû"], ["C-16", "C-8"], ["Babidi", "Bibidi"], ["Oolong", "Plume"], ["Videl", "Pan"], ["Tenshinhan", "Chaozu"], ["Cell Jr", "Saibaman"], ["Armée du Ruban Rouge", "Commando Ginyu"], ["C-19", "C-20"], ["C-17", "Super C-17"], ["Gamma 1", "Gamma 2"], ["Zeno", "Grand Prêtre"], ["Trunks du futur", "Tapion"], ["Goku enfant", "Goten"], ["Porunga", "Super Shenron"], ["Zarbon", "Dodoria"], ["Recoome", "Burter"], ["Kid Buu", "Super Buu"]]
   }
 };
+const CLASSIQUE={nom:"Classique (vie de tous les jours)",pairs:[["Micro-ondes", "Four"], ["Café", "Thé"], ["Chat", "Chien"], ["Plage", "Piscine"], ["Avion", "Hélicoptère"], ["Train", "Métro"], ["Guitare", "Violon"], ["Pizza", "Burger"], ["Frigo", "Congélateur"], ["Lit", "Canapé"], ["Fourchette", "Cuillère"], ["Assiette", "Bol"], ["Douche", "Baignoire"], ["Shampoing", "Gel douche"], ["Brosse à dents", "Dentifrice"], ["Stylo", "Crayon"], ["Livre", "Magazine"], ["Téléphone", "Tablette"], ["Ordinateur", "Console"], ["Netflix", "YouTube"], ["Instagram", "TikTok"], ["WhatsApp", "Snapchat"], ["Coca", "Pepsi"], ["McDo", "Burger King"], ["Croissant", "Pain au chocolat"], ["Crêpe", "Gaufre"], ["Glace", "Sorbet"], ["Chocolat", "Bonbon"], ["Pomme", "Poire"], ["Citron", "Orange"], ["Fraise", "Framboise"], ["Tomate", "Poivron"], ["Pâtes", "Riz"], ["Sushi", "Kebab"], ["Ketchup", "Mayonnaise"], ["Sel", "Poivre"], ["Sucre", "Miel"], ["Lait", "Yaourt"], ["Fromage", "Beurre"], ["Vélo", "Trottinette"], ["Voiture", "Moto"], ["Bus", "Tram"], ["Bateau", "Sous-marin"], ["Hôpital", "Pharmacie"], ["Médecin", "Dentiste"], ["Prof", "Directeur"], ["Policier", "Pompier"], ["Boulanger", "Pâtissier"], ["École", "Collège"], ["Cinéma", "Théâtre"], ["Concert", "Festival"], ["Football", "Rugby"], ["Basket", "Volley"], ["Tennis", "Ping-pong"], ["Ski", "Snowboard"], ["Montagne", "Volcan"], ["Forêt", "Jungle"], ["Mer", "Lac"], ["Pluie", "Neige"], ["Soleil", "Lune"], ["Été", "Printemps"], ["Noël", "Anniversaire"], ["Halloween", "Carnaval"], ["Lion", "Tigre"], ["Loup", "Renard"], ["Requin", "Dauphin"], ["Abeille", "Guêpe"], ["Papillon", "Libellule"], ["Poule", "Canard"], ["Vache", "Mouton"], ["Montre", "Bracelet"], ["Lunettes", "Lentilles"], ["Casquette", "Bonnet"], ["Baskets", "Bottes"], ["Jean", "Jogging"], ["Parapluie", "Imperméable"], ["Clé", "Cadenas"], ["Bougie", "Lampe"], ["Miroir", "Fenêtre"], ["Escalier", "Ascenseur"]]};
+function pairsFor(u){if(u==="classique")return CLASSIQUE.pairs;if(u==="all")return Object.values(UNI).flatMap(x=>x.pairs).concat(CLASSIQUE.pairs);return (UNI[u]||UNI.db).pairs}
 const UNI_SOON = ["One Piece","Naruto","Jujutsu Kaisen","Demon Slayer"];
 const MODES = {
   enchereC:{nom:"Enchère classique",pl:"2 joueurs",min:2,max:99,
@@ -198,7 +200,7 @@ function uniName(cid){return UNI[String(cid).split(":")[0]]?.nom??""}
 function pool(uni){return UNI[uni].chars.map((_,i)=>uni+":"+i)}
 function allPool(){return Object.keys(UNI).flatMap(pool)}
 function poolFor(u){return u==="all"||!UNI[u]?allPool():pool(u)}
-function uniLabel(u){return u==="all"?"Tout (tous les univers)":(UNI[u]?.nom??"?")}
+function uniLabel(u){return u==="all"?"Tout (tous les univers)":u==="classique"?CLASSIQUE.nom:(UNI[u]?.nom??"?")}
 function avColor(s){return ["#4d8dff","#ff5a6e","#ffffff"][hash(s)%3]}
 function fmtM(n){return n+" M"}
 function genCode(){const a="abcdefghjkmnpqrstuvwxyz23456789";let s="";for(let i=0;i<5;i++)s+=a[rnd(a.length)];return s}
@@ -393,9 +395,9 @@ function handle(peer,a){
   const i=idxOf(peer);
   let ch=false;
   switch(a.t){
-    case "mode": if(host&&H.ph==="lobby"&&MODES[a.m]&&!MODES[a.m].off){H.mode=a.m;ch=true}break;
+    case "mode": if(host&&H.ph==="lobby"&&MODES[a.m]&&!MODES[a.m].off){H.mode=a.m;if(a.m!=="undercover"&&H.uni==="classique")H.uni="db";ch=true}break;
     case "cfgE": if(host&&H.ph==="lobby"){const ps=H.pl.map(p=>p.p);if(ps.includes(a.p)){H.cfg.e[a.k?1:0]=a.p;if(H.cfg.e[0]===H.cfg.e[1])H.cfg.e[a.k?0:1]=ps.find(x=>x!==a.p)??null;ch=true}}break;
-    case "uni": if(host&&H.ph==="lobby"&&(a.u==="all"||UNI[a.u])){H.uni=a.u;ch=true}break;
+    case "uni": if(host&&H.ph==="lobby"&&(a.u==="all"||UNI[a.u]||(a.u==="classique"&&H.mode==="undercover"))){H.uni=a.u;ch=true}break;
     case "cfgJ": if(host&&H.ph==="lobby"&&H.pl.some(p=>p.p===a.p)){H.cfg.j=a.p;ch=true}break;
     case "start": if(host&&H.ph==="lobby"&&!canStart(H)){startGame();ch=true}break;
     case "lobby": if(host){H.ph="lobby";delete H.e;delete H.u;delete H.d;delete H.ends;fixCfg();ch=true}break;
@@ -411,10 +413,10 @@ function startGame(){
     H.ph="e_draw";
   }else if(H.mode==="undercover"){
     const order=shuffle(H.pl.map((_,k)=>k));
-    const np=UNI[H.uni==="all"?"db":H.uni].pairs.length;
-    let pair=rnd(np);if(np>1)while(pair===H.lastPair)pair=rnd(np);
-    H.lastPair=pair;
-    H.u={order,pair,chat:[],sw:rnd(2),imp:order[rnd(order.length)],r:1,rv:2,i:0,cl:{},votes:{},tie:null,res:null};
+    const ps=pairsFor(H.uni);
+    let w=ps[rnd(ps.length)];if(ps.length>1)while(w.join("|")===H.lastPair)w=ps[rnd(ps.length)];
+    H.lastPair=w.join("|");
+    H.u={order,w:w.slice(),chat:[],sw:rnd(2),imp:order[rnd(order.length)],r:1,rv:2,i:0,cl:{},votes:{},tie:null,res:null};
     H.ph="u_clue";
   }else{
     const j=idxOf(H.cfg.j);
@@ -637,7 +639,7 @@ function viewLobby(){
   <div class="panel stack"><span class="lab">Joueurs · ${s.pl.length}</span>${list}${avatarPicker()}</div>
   <div class="stack"><span class="lab">Mode de jeu</span>${modes}</div>
   <div class="panel stack">
-    <div class="row"><span class="lab">Univers</span>${isHost?`<select id="uni" data-a="uni"><option value="all" ${s.uni==="all"?"selected":""}>Tout (tous les univers)</option>${Object.entries(UNI).map(([k,u])=>`<option value="${k}" ${s.uni===k?"selected":""}>${esc(u.nom)}</option>`).join("")}${UNI_SOON.map(u=>`<option disabled>${esc(u)} (bientôt)</option>`).join("")}</select>`:`<b>${esc(uniLabel(s.uni))}</b>`}</div>
+    <div class="row"><span class="lab">Univers</span>${isHost?`<select id="uni" data-a="uni"><option value="all" ${s.uni==="all"?"selected":""}>Tout (tous les univers)</option>${Object.entries(UNI).map(([k,u])=>`<option value="${k}" ${s.uni===k?"selected":""}>${esc(u.nom)}</option>`).join("")}${s.mode==="undercover"?`<option value="classique" ${s.uni==="classique"?"selected":""}>${esc(CLASSIQUE.nom)}</option>`:""}${UNI_SOON.map(u=>`<option disabled>${esc(u)} (bientôt)</option>`).join("")}</select>`:`<b>${esc(uniLabel(s.uni))}</b>`}</div>
     ${extra}
     ${rulesBox(s.mode)}
   </div>
@@ -710,7 +712,7 @@ function chatBox(u,inGame){
     ${inGame?`<div class="row"><input type="text" id="uchat" maxlength="60" placeholder="Écris un message…"><button class="btn" data-a="uChat">Envoyer</button></div>`:""}</div>`;
 }
 function viewU(){
-  const u=st.u,mi=myIdx(),ph=st.ph,pair=UNI[st.uni==="all"?"db":st.uni].pairs[u.pair];
+  const u=st.u,mi=myIdx(),ph=st.ph,pair=u.w||["?","?"];
   const wordOf=k=>pair[k===u.imp?1-u.sw:u.sw];
   const inGame=u.order.includes(mi);
   const myWord=inGame?`<div class="panel row" style="justify-content:space-between"><div><span class="lab">Ton mot secret</span><div class="word">${esc(wordOf(mi))}</div></div><p class="muted" style="margin:0;max-width:30ch;font-size:14px">Ne le dis pas. L'imposteur a un mot différent et ne sait pas qu'il l'est.</p></div>`:"";
